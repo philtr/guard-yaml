@@ -1,0 +1,3 @@
+guard :yaml do
+  watch(%r{^config/(.*).yml})
+end
