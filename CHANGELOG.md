@@ -9,11 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-09-12
+
 ### Added
 
 - Added GitHub Actions CI for supported Ruby versions.
 - Added automated version tagging and RubyGems releases using trusted publishing.
 - Added a Minitest test suite.
+- Added StandardRB formatting and linting.
 
 ### Changed
 
@@ -29,5 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial Guard plugin for checking YAML syntax.
 
-[Unreleased]: https://github.com/philtr/guard-yaml/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/philtr/guard-yaml/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/philtr/guard-yaml/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/philtr/guard-yaml/tree/v0.0.1
