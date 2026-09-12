@@ -4,14 +4,14 @@
 require_relative "lib/guard/yaml/version"
 
 Gem::Specification.new do |gem|
-  gem.name          = "guard-yaml"
-  gem.version       = Guard::YamlVersion::VERSION
-  gem.authors       = ["Phillip Ridlen", "Stan Carver II"]
-  gem.email         = ["p@rdln.net", "howdy@stancarver.com"]
-  gem.summary       = "Checks YAML syntax when watched files change"
-  gem.description   = "A focused Guard plugin that parses watched YAML files and reports syntax errors."
-  gem.homepage      = "https://github.com/philtr/guard-yaml#readme"
-  gem.license       = "MIT"
+  gem.name = "guard-yaml"
+  gem.version = Guard::YamlVersion::VERSION
+  gem.authors = ["Phillip Ridlen", "Stan Carver II"]
+  gem.email = ["p@rdln.net", "howdy@stancarver.com"]
+  gem.summary = "Checks YAML syntax when watched files change"
+  gem.description = "A focused Guard plugin that parses watched YAML files and reports syntax errors."
+  gem.homepage = "https://github.com/philtr/guard-yaml#readme"
+  gem.license = "MIT"
   gem.required_ruby_version = ">= 3.1"
 
   gem.metadata = {
@@ -31,4 +31,5 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency "rake", "~> 13.2"
   gem.add_development_dependency "minitest", "~> 5.25"
+  gem.add_development_dependency "standard", "~> 1.0"
 end
