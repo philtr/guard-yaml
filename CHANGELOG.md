@@ -19,5 +19,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial Guard plugin for checking YAML syntax.
 
-[Unreleased]: https://github.com/scarver2/guard-yaml/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/philtr/guard-yaml/compare/v0.0.1...HEAD
 [0.0.1]: https://github.com/philtr/guard-yaml/tree/v0.0.1

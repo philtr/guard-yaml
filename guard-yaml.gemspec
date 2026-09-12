@@ -10,16 +10,16 @@ Gem::Specification.new do |gem|
   gem.email         = ["phillip@ovenbits.com", "howdy@stancarver.com"]
   gem.summary       = "Checks YAML syntax when watched files change"
   gem.description   = "A focused Guard plugin that parses watched YAML files and reports syntax errors."
-  gem.homepage      = "https://github.com/scarver2/guard-yaml#readme"
+  gem.homepage      = "https://github.com/philtr/guard-yaml#readme"
   gem.license       = "MIT"
   gem.required_ruby_version = ">= 3.1"
 
   gem.metadata = {
-    "bug_tracker_uri" => "https://github.com/scarver2/guard-yaml/issues",
-    "changelog_uri" => "https://github.com/scarver2/guard-yaml/blob/master/CHANGELOG.md",
+    "bug_tracker_uri" => "https://github.com/philtr/guard-yaml/issues",
+    "changelog_uri" => "https://github.com/philtr/guard-yaml/blob/master/CHANGELOG.md",
     "homepage_uri" => gem.homepage,
     "rubygems_mfa_required" => "true",
-    "source_code_uri" => "https://github.com/scarver2/guard-yaml"
+    "source_code_uri" => "https://github.com/philtr/guard-yaml"
   }
 
   gem.files = Dir.chdir(__dir__) do
