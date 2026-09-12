@@ -3,6 +3,8 @@
 require "minitest/autorun"
 require "tempfile"
 
+ENV["GUARD_STRICT"] = "1"
+
 require "guard/yaml"
 
 class GuardYamlTest < Minitest::Test
