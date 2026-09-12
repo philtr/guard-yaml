@@ -23,11 +23,12 @@ Gem::Specification.new do |gem|
   }
 
   gem.files = Dir.chdir(__dir__) do
-    `git ls-files -z`.split("\x0").reject { |file| file.start_with?(".", "spec/") }
+    `git ls-files -z`.split("\x0").reject { |file| file.start_with?(".", "spec/", "test/") }
   end
   gem.require_paths = ["lib"]
 
   gem.add_dependency "guard", ">= 2.18", "< 3"
 
   gem.add_development_dependency "rake", "~> 13.2"
+  gem.add_development_dependency "minitest", "~> 5.25"
 end
