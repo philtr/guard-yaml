@@ -5,8 +5,10 @@ on:
   push:
     branches:
       - master
-    tags:
-      - "v*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -54,39 +56,3 @@ jobs:
 
       - name: Run StandardRB
         run: bundle exec standardrb
-
-  release:
-    name: Release to RubyGems.org
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs:
-      - lint
-      - test
-    runs-on: ubuntu-latest
-    environment: release
-    permissions:
-      contents: write
-      id-token: write
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "4.0"
-          bundler-cache: true
-
-      - name: Verify tag matches gem version
-        shell: bash
-        run: |
-          expected_tag="v$(ruby -Ilib -rguard/yaml/version -e 'print Guard::YamlVersion::VERSION')"
-          if [[ "${GITHUB_REF_NAME}" != "${expected_tag}" ]]; then
-            echo "Tag ${GITHUB_REF_NAME} does not match ${expected_tag}."
-            exit 1
-          fi
-
-      - name: Publish gem
-        uses: rubygems/release-gem@v1

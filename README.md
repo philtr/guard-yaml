@@ -31,16 +31,9 @@ Run the test suite with:
 
 ## Releasing
 
-Releases are published to RubyGems.org by GitHub Actions when a version tag is
-pushed and CI passes. The tag must match the version in
-`lib/guard/yaml/version.rb`, including the `v` prefix. For example, version
-`0.1.0` must be tagged as `v0.1.0`.
-
-Before the first automated release:
-
-1. Create a GitHub environment named `release`.
-2. Configure `philtr/guard-yaml` on RubyGems.org with a trusted publisher for
-   workflow `ci.yml` and environment `release`.
+After CI passes on `master`, GitHub Actions checks the version in
+`lib/guard/yaml/version.rb`. If its version tag does not exist, the workflow
+creates the tag and publishes the gem to RubyGems.org.
 
 No RubyGems API key is required. See the
 [RubyGems trusted publishing guide](https://guides.rubygems.org/trusted-publishing/)
