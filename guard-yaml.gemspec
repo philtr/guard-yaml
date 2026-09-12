@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.name          = "guard-yaml"
   gem.version       = Guard::YamlVersion::VERSION
   gem.authors       = ["Phillip Ridlen", "Stan Carver II"]
-  gem.email         = ["phillip@ovenbits.com", "howdy@stancarver.com"]
+  gem.email         = ["p@rdln.net", "howdy@stancarver.com"]
   gem.summary       = "Checks YAML syntax when watched files change"
   gem.description   = "A focused Guard plugin that parses watched YAML files and reports syntax errors."
   gem.homepage      = "https://github.com/philtr/guard-yaml#readme"
