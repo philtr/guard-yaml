@@ -9,9 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added GitHub Actions CI for supported Ruby versions.
+- Added automated RubyGems releases using trusted publishing.
+- Added a Minitest test suite.
+
 ### Changed
 
 - Modernized RubyGem packaging metadata and dependency declarations.
+
+### Fixed
+
+- Updated the plugin to use the Guard 2 plugin API.
 
 ## [0.0.1] - 2012-07-19
 
