@@ -6,11 +6,9 @@ module Guard
   class Yaml < Plugin
     def run_on_changes(paths)
       paths.each do |path|
-        begin
-          YAML.load(File.open(path))
-        rescue Psych::SyntaxError => e
-          puts "#{e.class}: #{e.message}"
-        end
+        YAML.load(File.open(path))
+      rescue Psych::SyntaxError => e
+        puts "#{e.class}: #{e.message}"
       end
     end
   end
