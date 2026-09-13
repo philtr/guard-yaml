@@ -34,6 +34,35 @@ class GuardYamlTest < Minitest::Test
       stdout, stderr = capture_io { @plugin.run_on_changes([path]) }
 
       assert_match(/Psych::SyntaxError/, stdout)
+      assert_includes stdout, path
+      assert_empty stderr
+    end
+  end
+
+  def test_invalid_later_document_in_stream_reports_a_syntax_error
+    with_yaml("---\nname: valid\n---\nitems: [one, two\n") do |path|
+      stdout, stderr = capture_io { @plugin.run_on_changes([path]) }
+
+      assert_match(/Psych::SyntaxError/, stdout)
+      assert_includes stdout, path
+      assert_empty stderr
+    end
+  end
+
+  def test_valid_multi_document_stream_does_not_report_an_error
+    with_yaml("---\nname: first\n---\nname: second\n") do |path|
+      stdout, stderr = capture_io { @plugin.run_on_changes([path]) }
+
+      assert_empty stdout
+      assert_empty stderr
+    end
+  end
+
+  def test_valid_ruby_object_tag_is_parsed_without_deserialization
+    with_yaml("--- !ruby/object:Object {}\n") do |path|
+      stdout, stderr = capture_io { @plugin.run_on_changes([path]) }
+
+      assert_empty stdout
       assert_empty stderr
     end
   end
