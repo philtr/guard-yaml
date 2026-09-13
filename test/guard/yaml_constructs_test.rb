@@ -93,11 +93,10 @@ class GuardYamlConstructsTest < Minitest::Test
   def test_rejects_representative_invalid_yaml_constructs
     INVALID_DOCUMENTS.each do |description, yaml|
       with_yaml(yaml) do |path|
-        stdout, stderr = capture_io { @plugin.run_on_changes([path]) }
+        errors = run_plugin(path)
 
-        assert_includes stdout, path, description
-        assert_includes stdout, "^", description
-        assert_empty stderr, description
+        assert_includes errors.join("\n"), path, description
+        assert_includes errors.join("\n"), "^", description
       end
     end
   end
@@ -106,11 +105,22 @@ class GuardYamlConstructsTest < Minitest::Test
 
   def assert_valid_yaml(yaml, description)
     with_yaml(yaml) do |path|
-      stdout, stderr = capture_io { @plugin.run_on_changes([path]) }
+      errors = run_plugin(path)
 
-      assert_empty stdout, description
-      assert_empty stderr, description
+      assert_empty errors, description
     end
+  end
+
+  def run_plugin(path)
+    errors = []
+
+    Guard::UI.stub(:error, ->(message) { errors << message }) do
+      Guard::UI.stub(:info, ->(_message) {}) do
+        catch(:task_has_failed) { @plugin.run_on_changes([path]) }
+      end
+    end
+
+    errors
   end
 
   def with_yaml(contents)
