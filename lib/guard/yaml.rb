@@ -1,6 +1,7 @@
 require "guard/plugin"
 require "guard/yaml/diagnostic"
 require "guard/yaml/diagnostic_formatter"
+require "guard/yaml/validation_policy"
 require "guard/yaml/version"
 require "yaml"
 
@@ -22,7 +23,8 @@ module Guard
     private
 
     def validate(paths)
-      failed = paths.reject { |path| valid_yaml?(path) }
+      policy = YamlSupport::ValidationPolicy.new((options || {}).fetch(:strict, {}))
+      failed = paths.reject { |path| valid_yaml?(path, policy) }
       valid_count = paths.length - failed.length
       summary = "Checked #{paths.length} YAML #{pluralize(paths.length, "file")}: " \
         "#{valid_count} valid, #{failed.length} invalid."
@@ -33,9 +35,12 @@ module Guard
       true
     end
 
-    def valid_yaml?(path)
+    def valid_yaml?(path, policy)
       File.open(path, "r:bom|utf-8") do |file|
-        Psych.parse_stream(file, filename: path)
+        stream = Psych.parse_stream(file, filename: path)
+        violations = policy.violations(stream)
+        violations.each { |violation| report_policy_violation(violation, file, path) }
+        return false unless violations.empty?
       rescue Psych::SyntaxError => error
         report_syntax_error(error, file, path)
         return false
@@ -45,6 +50,18 @@ module Guard
     rescue SystemCallError => error
       UI.error("#{path}: #{error.message}")
       false
+    end
+
+    def report_policy_violation(violation, file, path)
+      diagnostic = YamlSupport::Diagnostic.new(
+        path: path,
+        line: violation.line,
+        column: violation.column,
+        problem: violation.problem,
+        context: "while enforcing guard-yaml validation policy",
+        source_line: source_line(file, violation.line)
+      )
+      UI.error(YamlSupport::DiagnosticFormatter.new.format(diagnostic))
     end
 
     def report_syntax_error(error, file, path)

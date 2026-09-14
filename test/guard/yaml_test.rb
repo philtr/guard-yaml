@@ -139,6 +139,41 @@ class GuardYamlTest < Minitest::Test
     end
   end
 
+  def test_strict_alias_policy_reports_alias_references_as_errors
+    @plugin.options = {strict: {aliases: false}}
+
+    with_yaml("default: &default value\ncopy: *default\n") do |path|
+      result, messages = run_plugin([path])
+      output = messages[:error].join("\n")
+
+      assert_nil result
+      assert_includes output, "#{path}:2:7: alias references are not allowed"
+      assert_includes output, "2 | copy: *default"
+      assert_equal "Checked 1 YAML file: 0 valid, 1 invalid.", messages[:error].last
+    end
+  end
+
+  def test_strict_tag_policy_reports_explicit_tags_as_errors
+    @plugin.options = {strict: {tags: false}}
+
+    with_yaml("value: !application/value accepted\n") do |path|
+      result, messages = run_plugin([path])
+
+      assert_nil result
+      assert_includes messages[:error].join("\n"), "explicit tags are not allowed"
+    end
+  end
+
+  def test_unknown_strict_options_fail_before_validation
+    @plugin.options = {strict: {styles: false}}
+
+    error = assert_raises(ArgumentError) do
+      run_plugin([])
+    end
+
+    assert_equal "unknown strict option: :styles", error.message
+  end
+
   private
 
   def run_plugin(paths = nil, &block)
