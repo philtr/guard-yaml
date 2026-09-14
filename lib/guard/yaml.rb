@@ -6,7 +6,9 @@ module Guard
   class Yaml < Plugin
     def run_on_changes(paths)
       paths.each do |path|
-        YAML.load(File.open(path))
+        File.open(path, "r:bom|utf-8") do |file|
+          Psych.parse_stream(file, filename: path)
+        end
       rescue Psych::SyntaxError => e
         puts "#{e.class}: #{e.message}"
       end
