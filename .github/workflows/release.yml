@@ -54,7 +54,9 @@ jobs:
 
   release:
     name: Tag and release to RubyGems.org
-    if: needs.release_check.outputs.should_release == 'true'
+    if: >-
+      github.repository == 'philtr/guard-yaml' &&
+      needs.release_check.outputs.should_release == 'true'
     needs: release_check
     concurrency: rubygems-release
     runs-on: ubuntu-latest
