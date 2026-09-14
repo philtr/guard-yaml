@@ -148,6 +148,12 @@ No RubyGems API key is required. See the
 [RubyGems trusted publishing guide](https://guides.rubygems.org/trusted-publishing/)
 for setup details.
 
+## Maintainers
+
+Originally created by [Phillip Ridlen](https://github.com/philtr).
+
+Currently maintained by Phillip Ridlen and [Stan Carver II](https://github.com/scarver2).
+
 ## License
 
 The gem is available under the terms of the [MIT License](LICENSE.txt).
