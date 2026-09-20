@@ -33,8 +33,10 @@ class GuardYamlTest < Minitest::Test
     with_yaml("---\nitems: [one, two\n") do |path|
       stdout, stderr = capture_io { @plugin.run_on_changes([path]) }
 
-      assert_match(/Psych::SyntaxError/, stdout)
-      assert_includes stdout, path
+      assert_includes stdout, "#{path}:2:8: did not find expected ',' or ']'"
+      assert_includes stdout, "context: while parsing a flow sequence"
+      assert_includes stdout, "2 | items: [one, two"
+      assert_includes stdout, "    |        ^"
       assert_empty stderr
     end
   end
@@ -43,9 +45,40 @@ class GuardYamlTest < Minitest::Test
     with_yaml("---\nname: valid\n---\nitems: [one, two\n") do |path|
       stdout, stderr = capture_io { @plugin.run_on_changes([path]) }
 
-      assert_match(/Psych::SyntaxError/, stdout)
-      assert_includes stdout, path
+      assert_includes stdout, "#{path}:4:8: did not find expected ',' or ']'"
       assert_empty stderr
+    end
+  end
+
+  def test_reports_each_invalid_changed_file
+    with_yaml("first: [broken\n") do |first_path|
+      with_yaml("second: {broken\n") do |second_path|
+        stdout, stderr = capture_io { @plugin.run_on_changes([first_path, second_path]) }
+
+        assert_includes stdout, first_path
+        assert_includes stdout, second_path
+        assert_equal 2, stdout.scan("did not find expected").length
+        assert_empty stderr
+      end
+    end
+  end
+
+  def test_reports_source_context_for_representative_syntax_failures
+    malformed_documents = {
+      "flow mapping" => "root: {key: value\n",
+      "indentation" => "root:\n  child: one\n   sibling: two\n",
+      "quoted scalar" => "name: \"unterminated\n"
+    }
+
+    malformed_documents.each do |description, yaml|
+      with_yaml(yaml) do |path|
+        stdout, stderr = capture_io { @plugin.run_on_changes([path]) }
+
+        assert_includes stdout, path, description
+        assert_includes stdout, yaml.lines.last.chomp, description
+        assert_includes stdout, "^", description
+        assert_empty stderr, description
+      end
     end
   end
 
