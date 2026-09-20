@@ -24,8 +24,13 @@ module Guard
     def validate(paths)
       failed = paths.reject { |path| valid_yaml?(path) }
       valid_count = paths.length - failed.length
-      summary = "Checked #{paths.length} YAML #{pluralize(paths.length, "file")}: " \\
-        "#{valid_count} valid, #{failed.length} invalid."
+      summary = format(
+        "Checked %d YAML %s: %d valid, %d invalid.",
+        paths.length,
+        pluralize(paths.length, "file"),
+        valid_count,
+        failed.length
+      )
 
       failed.empty? ? UI.info(summary) : UI.error(summary)
       throw :task_has_failed unless failed.empty?
